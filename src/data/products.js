@@ -62,6 +62,6 @@ export const brand = {
   name: "B'N",
   fullName: "Blessing Nice",
   tagline: "Scents by Blessing Nice",
-  whatsappNumber: "2340000000000", // replace with the real number, digits only, country code first
+  whatsappNumber: "2349064428036", // replace with the real number, digits only, country code first
 }
 
