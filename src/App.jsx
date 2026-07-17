@@ -8,6 +8,7 @@ import Hero from "./components/Hero.jsx";
 import ProductGrid from "./components/ProductGrid.jsx";
 import HowItWorks from "./components/HowItWorks.jsx";
 import Footer from "./components/Footer.jsx";
+import CollectionPage from "./pages/CollectionPage.jsx";
 
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
@@ -18,7 +19,7 @@ function Storefront() {
     <>
       <Nav />
       <Hero />
-      <ProductGrid />
+      <ProductGrid limit={8} />
       <HowItWorks />
       <Footer />
     </>
@@ -32,6 +33,7 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Storefront />} />
+            <Route path="/collection" element={<CollectionPage />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route
               path="/admin"

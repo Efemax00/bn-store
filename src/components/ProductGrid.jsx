@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { useProducts } from "../context/ProductsContext.jsx";
 import ProductCard from "./ProductCard.jsx";
+import ProductModal from "./ProductModal.jsx";
 
 export default function ProductGrid() {
   const { products, loading } = useProducts();
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   if (loading) {
     return (
@@ -15,7 +18,9 @@ export default function ProductGrid() {
             </div>
           </div>
 
-          <p>Loading fragrances...</p>
+          <p style={{ textAlign: "center", padding: "60px 0" }}>
+            Loading fragrances...
+          </p>
         </div>
       </section>
     );
@@ -32,23 +37,41 @@ export default function ProductGrid() {
 
           <p>
             {products.length} fragrance
-            {products.length !== 1 ? "s" : ""} currently available. Tap any
-            fragrance to enquire or order on WhatsApp.
+            {products.length !== 1 ? "s" : ""} available. Click{" "}
+            <strong>View More</strong> for full details or{" "}
+            <strong>Order Now</strong> to chat on WhatsApp.
           </p>
         </div>
 
         {products.length === 0 ? (
-          <div className="empty-state">
-            <p>No fragrances available at the moment.</p>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "80px 20px",
+            }}
+          >
+            <h3>No perfumes available yet.</h3>
+            <p>Check back soon for our latest collection.</p>
           </div>
         ) : (
           <div className="grid">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                onViewMore={setSelectedProduct}
+              />
             ))}
           </div>
         )}
       </div>
+
+      {selectedProduct && (
+        <ProductModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
     </section>
   );
 }
