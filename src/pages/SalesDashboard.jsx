@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProducts } from "../context/ProductsContext.jsx";
-import { getProducts } from "../services/productService";
+import { getProducts, updateProduct } from "../services/productService";
 import { recordSale, getSales } from "../services/salesService";
 import Nav from "../components/Nav.jsx";
 import Footer from "../components/Footer.jsx";
-
 
 function isSameDay(a, b) {
   return (
@@ -31,7 +30,7 @@ function formatNaira(n) {
 }
 
 export default function SalesDashboard() {
-  const { products, fetchProducts } = useProducts(); 
+  const { products, fetchProducts } = useProducts();
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState("");
@@ -56,17 +55,20 @@ export default function SalesDashboard() {
   }
 
   async function refreshProducts() {
-  try {
-    const data = await getProducts();
-    setProducts(data.products);
-  } catch (err) {
-    console.error(err);
+    try {
+      const data = await getProducts();
+      setProducts(data.products);
+    } catch (err) {
+      console.error(err);
+    }
   }
-}
 
   const stats = useMemo(() => {
     const now = new Date();
-    let today = 0, thisWeek = 0, total = 0, revenue = 0;
+    let today = 0,
+      thisWeek = 0,
+      total = 0,
+      revenue = 0;
 
     sales.forEach((s) => {
       const date = new Date(s.date || s.createdAt);
@@ -99,10 +101,8 @@ export default function SalesDashboard() {
       // 1. record the sale
       await recordSale({
         productId: product.id,
-        productName: product.name,
         quantity: qty,
-        unitPrice,
-        total: qty * unitPrice,
+        amount: qty * unitPrice,
       });
 
       // 2. decrease stock — adjust field name/payload shape to match
@@ -110,20 +110,20 @@ export default function SalesDashboard() {
       const newStock = currentStock - qty;
       const formData = new FormData();
 
-formData.append("name", product.name);
-formData.append("manufacturer", product.manufacturer);
-formData.append("price", product.price);
-formData.append("currency", product.currency);
-formData.append("stock", newStock);
-formData.append("size", product.size);
-formData.append("type", product.type || "");
-formData.append("description", product.description || "");
+      formData.append("name", product.name);
+      formData.append("manufacturer", product.manufacturer);
+      formData.append("price", product.price);
+      formData.append("currency", product.currency);
+      formData.append("stock", newStock);
+      formData.append("size", product.size);
+      formData.append("type", product.type || "");
+      formData.append("description", product.description || "");
 
-(product.notes || []).forEach(note => {
-    formData.append("notes[]", note);
-});
+      (product.notes || []).forEach((note) => {
+        formData.append("notes[]", note);
+      });
 
-await updateProduct(product.id, formData);
+      await updateProduct(product.id, formData);
       // 3. refresh local state
       if (refreshProducts) await fetchProducts();
       await loadSales();
@@ -149,30 +149,26 @@ await updateProduct(product.id, formData);
               <div className="brand-tag">Sales dashboard</div>
             </div>
 
-<div style={{ display: "flex", gap: 12 }}>
-  <button
-    className="admin-btn-ghost"
-    onClick={() => navigate("/admin")}
-  >
-    📦 Products
-  </button>
+            <div style={{ display: "flex", gap: 12 }}>
+              <button
+                className="admin-btn-ghost"
+                onClick={() => navigate("/admin")}
+              >
+                📦 Products
+              </button>
 
-  <button
-    className="admin-btn-ghost"
-    onClick={() => navigate("/admin/sales")}
-  >
-    💰 Sales
-  </button>
+              <button
+                className="admin-btn-ghost"
+                onClick={() => navigate("/admin/sales")}
+              >
+                💰 Sales
+              </button>
 
-  <button
-    className="admin-btn-ghost"
-    onClick={() => navigate("/")}
-  >
-    🛍 Storefront
-  </button>
-</div>
-
-</div>
+              <button className="admin-btn-ghost" onClick={() => navigate("/")}>
+                🛍 Storefront
+              </button>
+            </div>
+          </div>
 
           {/* stat tiles */}
           <div
@@ -190,7 +186,9 @@ await updateProduct(product.id, formData);
             </div>
             <div className="admin-card">
               <h3 className="admin-card-title">This week</h3>
-              <p style={{ fontSize: 28, color: "var(--fg)" }}>{stats.thisWeek}</p>
+              <p style={{ fontSize: 28, color: "var(--fg)" }}>
+                {stats.thisWeek}
+              </p>
               <p className="field-hint">units sold</p>
             </div>
             <div className="admin-card">
@@ -255,7 +253,8 @@ await updateProduct(product.id, formData);
             {/* recent sales list */}
             <div className="admin-card">
               <h3 className="admin-card-title">
-                Recent sales <span className="field-hint">{sales.length} total</span>
+                Recent sales{" "}
+                <span className="field-hint">{sales.length} total</span>
               </h3>
               <div className="admin-list">
                 {loading && <p className="field-hint">Loading…</p>}
@@ -263,14 +262,19 @@ await updateProduct(product.id, formData);
                   <p className="field-hint">No sales recorded yet.</p>
                 )}
                 {[...sales]
-                  .sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt))
+                  .sort(
+                    (a, b) =>
+                      new Date(b.date || b.createdAt) -
+                      new Date(a.date || a.createdAt),
+                  )
                   .slice(0, 12)
                   .map((s) => (
                     <div className="admin-list-row" key={s.id || s._id}>
                       <div>
                         <strong>{s.productName}</strong>
                         <div className="field-hint">
-                          Qty {s.quantity} · {formatNaira(s.total ?? s.quantity * s.unitPrice)}
+                          Qty {s.quantity} ·{" "}
+                          {formatNaira(s.total ?? s.quantity * s.unitPrice)}
                         </div>
                       </div>
                       <span className="field-hint">
