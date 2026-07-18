@@ -7,8 +7,11 @@ function authHeaders() {
   };
 }
 
-// Get all products
-export async function getProducts() {
+/* -------------------------------------------------------------------------- */
+/*                                Storefront                                  */
+/* -------------------------------------------------------------------------- */
+
+export async function getStoreProducts() {
   const response = await fetch(`${API_BASE_URL}/api/products`);
 
   const data = await response.json();
@@ -17,16 +20,47 @@ export async function getProducts() {
     throw new Error(data.message || "Failed to load products.");
   }
 
-  return data.data; // <-- return only the array
+  return data.data;
 }
 
-// Create
+/* -------------------------------------------------------------------------- */
+/*                              Admin Products                                */
+/* -------------------------------------------------------------------------- */
+
+export async function getProducts() {
+  const response = await fetch(
+    `${API_BASE_URL}/api/admin/products`,
+    {
+      headers: authHeaders(),
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to load products.");
+  }
+
+  // Supports both:
+  // res.json(products)
+  // and
+  // res.json({ success: true, data: products })
+  return data.data ?? data;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              Create Product                                */
+/* -------------------------------------------------------------------------- */
+
 export async function createProduct(formData) {
-  const response = await fetch(`${API_BASE_URL}/api/admin/products`, {
-    method: "POST",
-    headers: authHeaders(),
-    body: formData,
-  });
+  const response = await fetch(
+    `${API_BASE_URL}/api/admin/products`,
+    {
+      method: "POST",
+      headers: authHeaders(),
+      body: formData,
+    }
+  );
 
   const data = await response.json();
 
@@ -37,7 +71,10 @@ export async function createProduct(formData) {
   return data;
 }
 
-// Update
+/* -------------------------------------------------------------------------- */
+/*                              Update Product                                */
+/* -------------------------------------------------------------------------- */
+
 export async function updateProduct(id, formData) {
   const response = await fetch(
     `${API_BASE_URL}/api/admin/products/${id}`,
@@ -57,7 +94,10 @@ export async function updateProduct(id, formData) {
   return data;
 }
 
-// Delete
+/* -------------------------------------------------------------------------- */
+/*                              Delete Product                                */
+/* -------------------------------------------------------------------------- */
+
 export async function deleteProduct(id) {
   const response = await fetch(
     `${API_BASE_URL}/api/admin/products/${id}`,
