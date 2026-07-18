@@ -29,31 +29,35 @@ function Storefront() {
 export default function App() {
   return (
     <AuthProvider>
-      <ProductsProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Storefront />} />
-            <Route path="/collection" element={<CollectionPage />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Storefront />} />
+          <Route path="/collection" element={<CollectionPage />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <ProductsProvider>
                   <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/sales"
-              element={
-                <ProtectedRoute>
+                </ProductsProvider>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/sales"
+            element={
+              <ProtectedRoute>
+                <ProductsProvider>
                   <SalesDashboard />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      </ProductsProvider>
+                </ProductsProvider>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </AuthProvider>
   );
 }

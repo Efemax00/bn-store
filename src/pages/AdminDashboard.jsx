@@ -27,7 +27,11 @@ const emptyForm = {
 
 export default function AdminDashboard() {
   const { logout } = useAuth();
-  const { products, addProduct, deleteProduct, nextNumber } = useProducts();
+  const {
+  products,
+  fetchProducts,
+  nextNumber,
+} = useProducts();
   const [form, setForm] = useState(emptyForm);
   const navigate = useNavigate();
   const [editingId, setEditingId] = useState(null);
@@ -74,17 +78,17 @@ export default function AdminDashboard() {
       console.log("==============================");
 
       if (editingId) {
-        const response = await updateProduct(editingId, formData);
-        console.log(response);
-        alert("Product updated successfully!");
-      } else {
-        const response = await createProduct(formData);
-        console.log(response);
-        alert("Product added successfully!");
-      }
+  await updateProduct(editingId, formData);
+  alert("Product updated successfully!");
+} else {
+  await createProduct(formData);
+  alert("Product added successfully!");
+}
 
-      setEditingId(null);
-      setForm(emptyForm);
+await fetchProducts();
+
+setEditingId(null);
+setForm(emptyForm);
     } catch (err) {
       console.error(err);
       alert(err.message || "Something went wrong.");
@@ -123,6 +127,25 @@ export default function AdminDashboard() {
     setEditingId(null);
     setForm(emptyForm);
   }
+
+  async function handleDelete(id) {
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this product?"
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await deleteProductApi(id);
+
+    await fetchProducts();
+
+    alert("Product deleted successfully.");
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Failed to delete product.");
+  }
+}
 
   return (
     <>
@@ -327,7 +350,7 @@ export default function AdminDashboard() {
                       <span className="scent-no">{p.number}</span>{" "}
                       <strong>{p.name}</strong>
                       <div className="field-hint">
-                        {p.type} · {p.price}
+                        {p.type} · ₦{Number(p.price).toLocaleString()}
                       </div>
                     </div>
                     <div style={{ display: "flex", gap: "8px" }}>
