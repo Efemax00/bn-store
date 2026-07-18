@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useProducts } from "../context/ProductsContext.jsx";
+import { useProducts } from "../context/AdminProductsContext.jsx";
 import { getProducts, updateProduct } from "../services/productService";
 import { recordSale, getSales } from "../services/salesService";
 import Nav from "../components/Nav.jsx";

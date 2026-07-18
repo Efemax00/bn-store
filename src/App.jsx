@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import { AuthProvider } from "./context/AuthContext.jsx";
-import { ProductsProvider } from "./context/ProductsContext.jsx";
+import { StoreProductsProvider } from "./context/StoreProductsContext.jsx";
+import { AdminProductsProvider } from "./context/AdminProductsContext.jsx";
 import ProtectedRoute from "./context/ProtectedRoute.jsx";
 
 import Nav from "./components/Nav.jsx";
@@ -8,8 +10,8 @@ import Hero from "./components/Hero.jsx";
 import ProductGrid from "./components/ProductGrid.jsx";
 import HowItWorks from "./components/HowItWorks.jsx";
 import Footer from "./components/Footer.jsx";
-import CollectionPage from "./pages/CollectionPage.jsx";
 
+import CollectionPage from "./pages/CollectionPage.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import SalesDashboard from "./pages/SalesDashboard.jsx";
@@ -31,17 +33,37 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Storefront />} />
-          <Route path="/collection" element={<CollectionPage />} />
+          {/* ===================== PUBLIC STORE ===================== */}
+
+          <Route
+            path="/"
+            element={
+              <StoreProductsProvider>
+                <Storefront />
+              </StoreProductsProvider>
+            }
+          />
+
+          <Route
+            path="/collection"
+            element={
+              <StoreProductsProvider>
+                <CollectionPage />
+              </StoreProductsProvider>
+            }
+          />
+
+          {/* ===================== ADMIN ===================== */}
+
           <Route path="/admin/login" element={<AdminLogin />} />
 
           <Route
             path="/admin"
             element={
               <ProtectedRoute>
-                <ProductsProvider>
+                <AdminProductsProvider>
                   <AdminDashboard />
-                </ProductsProvider>
+                </AdminProductsProvider>
               </ProtectedRoute>
             }
           />
@@ -50,9 +72,9 @@ export default function App() {
             path="/admin/sales"
             element={
               <ProtectedRoute>
-                <ProductsProvider>
+                <AdminProductsProvider>
                   <SalesDashboard />
-                </ProductsProvider>
+                </AdminProductsProvider>
               </ProtectedRoute>
             }
           />

@@ -8,9 +8,9 @@ import {
 
 import { getProducts } from "../services/productService";
 
-const ProductsContext = createContext(null);
+const AdminProductsContext = createContext(null);
 
-export function ProductsProvider({ children }) {
+export function AdminProductsProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -41,7 +41,7 @@ export function ProductsProvider({ children }) {
   }
 
   return (
-    <ProductsContext.Provider
+    <AdminProductsContext.Provider
       value={{
         products,
         setProducts,
@@ -51,15 +51,15 @@ export function ProductsProvider({ children }) {
       }}
     >
       {children}
-    </ProductsContext.Provider>
+    </AdminProductsContext.Provider>
   );
 }
 
 export function useProducts() {
-  const ctx = useContext(ProductsContext);
+  const ctx = useContext(AdminProductsContext);
 
   if (!ctx) {
-    throw new Error("useProducts must be used inside ProductsProvider");
+    throw new Error("useProducts must be used inside AdminProductsProvider");
   }
 
   return ctx;

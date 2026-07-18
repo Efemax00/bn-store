@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
-import { useProducts } from "../context/ProductsContext.jsx";
+import { useProducts } from "../context/AdminProductsContext.jsx";
 import Nav from "../components/Nav.jsx";
 import Footer from "../components/Footer.jsx";
 import {

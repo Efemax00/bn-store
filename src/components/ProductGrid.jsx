@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useProducts } from "../context/ProductsContext.jsx";
+import { useStoreProducts } from "../context/StoreProductsContext";
 import ProductCard from "./ProductCard.jsx";
 import ProductModal from "./ProductModal.jsx";
 
 export default function ProductGrid() {
-  const { products, loading } = useProducts();
+  const { products, loading } = useStoreProducts();
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   if (loading) {
