@@ -10,19 +10,38 @@ import { getStoreProducts } from "../services/productService";
 
 const StoreProductsContext = createContext(null);
 
-export function StoreProductsProvider({ children }) {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+const CACHE_KEY = "store-products-cache";
 
-  const fetchProducts = useCallback(async () => {
-    setLoading(true);
+export function StoreProductsProvider({ children }) {
+  // Load cached products immediately
+  const [products, setProducts] = useState(() => {
+    const cached = localStorage.getItem(CACHE_KEY);
+
+    if (!cached) return [];
 
     try {
-      const products = await getStoreProducts();
-      setProducts(products);
+      return JSON.parse(cached);
+    } catch {
+      return [];
+    }
+  });
+
+  // Only show loading if no cache exists
+  const [loading, setLoading] = useState(products.length === 0);
+
+  const fetchProducts = useCallback(async () => {
+    try {
+      const freshProducts = await getStoreProducts();
+
+      setProducts(freshProducts);
+
+      // Save latest products to cache
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify(freshProducts)
+      );
     } catch (err) {
-      console.error(err);
-      setProducts([]);
+      console.error("Failed to fetch store products:", err);
     } finally {
       setLoading(false);
     }

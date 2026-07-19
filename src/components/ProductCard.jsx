@@ -47,7 +47,12 @@ export default function ProductCard({ product, onViewProduct }) {
       >
         <div className="card-image-wrap">
           {product.imageUrl ? (
-            <img src={product.imageUrl} alt={product.name} loading="lazy" />
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <div className="bottle-wrap">
               <BottleIcon />
