@@ -6,6 +6,9 @@ on:
   push:
     branches:
       - main
+      # ADD THIS STEP BELOW TO INSTALL DEPENDENCIES
+      - name: Install Dependencies
+        run: npm ci
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
