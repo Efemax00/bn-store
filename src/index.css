@@ -744,8 +744,65 @@ a.featured-chip {
 .featured-chip-price { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; color: var(--gold, #B8903E); letter-spacing: 0.5px; }
 
 
+.card-clickable { text-decoration: none; color: inherit; display: block; }
 
+.modal-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--paper);
+  color: var(--charcoal);
+  overflow: hidden;
+}
+.modal-image {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+.modal-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.modal-body {
+  padding: 32px 30px;
+  display: flex;
+  flex-direction: column;
+}
+.modal-foot {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--hair);
+  padding-top: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.modal-price {
+  font-family: "Fraunces", serif;
+  font-size: 22px;
+}
+.modal-stock {
+  font-size: 12.5px;
+  margin-top: 4px;
+}
 
+.detail-card {
+  align-items: start;
+  grid-template-columns: 1fr 1fr;
+}
+.detail-card .modal-image {
+  height: 480px;
+}
+@media (max-width: 680px) {
+  .detail-card {
+    grid-template-columns: 1fr;
+  }
+  .detail-card .modal-image {
+    height: 320px;
+  }
+}
 
 /* ---------- Admin ---------- */
 .admin-shell {

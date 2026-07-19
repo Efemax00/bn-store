@@ -5,6 +5,7 @@ import { StoreProductsProvider } from "./context/StoreProductsContext.jsx";
 import { AdminProductsProvider } from "./context/AdminProductsContext.jsx";
 import ProtectedRoute from "./context/ProtectedRoute.jsx";
 import { SearchProvider } from "./context/SearchContext.jsx";
+import ProductDetailPage from "./pages/ProductDetailPage.jsx";
 
 import Nav from "./components/Nav.jsx";
 import Hero from "./components/Hero.jsx";
@@ -53,6 +54,17 @@ export default function App() {
               <SearchProvider>
                 <StoreProductsProvider>
                   <CollectionPage />
+                </StoreProductsProvider>
+              </SearchProvider>
+            }
+          />
+
+          <Route
+            path="/product/:id"
+            element={
+              <SearchProvider>
+                <StoreProductsProvider>
+                  <ProductDetailPage />
                 </StoreProductsProvider>
               </SearchProvider>
             }

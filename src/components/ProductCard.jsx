@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { BottleIcon, WhatsAppIcon } from "./icons.jsx";
 
 const WHATSAPP_NUMBER = "2349064428036";
@@ -11,7 +12,20 @@ function formatPrice(price, currency = "NGN") {
   }).format(Number(price || 0));
 }
 
-export default function ProductCard({ product, onViewProduct }) {
+function getDiscount(product) {
+  const compareAt = Number(product.compareAtPrice || 0);
+  const price = Number(product.price || 0);
+  if (compareAt > price) {
+    return {
+      has: true,
+      compareAt,
+      pct: Math.round(((compareAt - price) / compareAt) * 100),
+    };
+  }
+  return { has: false };
+}
+
+export default function ProductCard({ product }) {
   const cardRef = useRef(null);
   const [visible, setVisible] = useState(false);
 
@@ -36,23 +50,14 @@ export default function ProductCard({ product, onViewProduct }) {
   const message = encodeURIComponent(
     `Hi! I'm interested in ${product.name} (${product.size}) - is it still available?`,
   );
+  const d = getDiscount(product);
 
   return (
     <div ref={cardRef} className={`card${visible ? " in" : ""}`}>
-      <button
-        type="button"
-        className="card-clickable"
-        onClick={() => onViewProduct?.(product)}
-        aria-label={`View details for ${product.name}`}
-      >
+      <Link to={`/product/${product.id}`} className="card-clickable">
         <div className="card-image-wrap">
           {product.imageUrl ? (
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              loading="lazy"
-              decoding="async"
-            />
+            <img src={product.imageUrl} alt={product.name} loading="lazy" />
           ) : (
             <div className="bottle-wrap">
               <BottleIcon />
@@ -81,12 +86,20 @@ export default function ProductCard({ product, onViewProduct }) {
             ))}
           </div>
         </div>
-      </button>
+      </Link>
 
       <div className="card-foot">
-        <span className="price">
-          {formatPrice(product.price, product.currency)}
-        </span>
+        <div className="price-block">
+          {d.has && (
+            <span className="price-was">
+              {formatPrice(d.compareAt, product.currency)}
+            </span>
+          )}
+          <span className="price">
+            {formatPrice(product.price, product.currency)}
+          </span>
+          {d.has && <span className="discount-badge">-{d.pct}%</span>}
+        </div>
         <a
           className="wa-btn"
           href={`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`}
