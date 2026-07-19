@@ -7,7 +7,7 @@ export default function CollectionPage() {
   return (
     <>
       <Nav />
-      <div style={{ padding: "24px 6vw 0" }}>
+      <div className="dark" style={{ padding: "24px 6vw 20px" }}>
         <Link
           to="/"
           className="admin-btn-ghost"
