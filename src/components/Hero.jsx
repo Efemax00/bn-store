@@ -1,9 +1,11 @@
 import { brand } from '../data/products.js'
 import { BottleIcon } from './icons.jsx'
+import FeaturedStrip  from './FeaturedStrip.jsx'
 
 export default function Hero() {
   return (
     <section className="hero light">
+      <FeaturedStrip />
       <div className="hero-plaque light">
         <BottleIcon className="bottle-mark" stroke="#B8903E" />
         <span className="eyebrow">{brand.tagline}</span>

@@ -4,6 +4,7 @@ import { AuthProvider } from "./context/AuthContext.jsx";
 import { StoreProductsProvider } from "./context/StoreProductsContext.jsx";
 import { AdminProductsProvider } from "./context/AdminProductsContext.jsx";
 import ProtectedRoute from "./context/ProtectedRoute.jsx";
+import { SearchProvider } from "./context/SearchContext.jsx";
 
 import Nav from "./components/Nav.jsx";
 import Hero from "./components/Hero.jsx";
@@ -38,18 +39,22 @@ export default function App() {
           <Route
             path="/"
             element={
-              <StoreProductsProvider>
-                <Storefront />
-              </StoreProductsProvider>
+              <SearchProvider>
+                <StoreProductsProvider>
+                  <Storefront />
+                </StoreProductsProvider>
+              </SearchProvider>
             }
           />
 
           <Route
             path="/collection"
             element={
-              <StoreProductsProvider>
-                <CollectionPage />
-              </StoreProductsProvider>
+              <SearchProvider>
+                <StoreProductsProvider>
+                  <CollectionPage />
+                </StoreProductsProvider>
+              </SearchProvider>
             }
           />
 

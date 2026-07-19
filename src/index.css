@@ -441,6 +441,20 @@ footer a {
   text-decoration: none;
 }
 
+.nav-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--paper);
+  border: 1px solid var(--gold);
+  padding: 8px 12px;
+  flex: 1; max-width: 280px; margin: 0 20px;
+  color: var(--gray);
+}
+.nav-search input {
+  background: none; border: none; outline: none; color: var(--charcoal);
+  font-family: 'Manrope', sans-serif; font-size: 13px; width: 100%;
+}
+.nav-search input::placeholder { color: var(--gray); }
+
 @media (max-width: 640px) {
   .strip-inner {
     grid-template-columns: 1fr;
@@ -450,6 +464,288 @@ footer a {
     padding: 18px 5vw;
   }
 }
+
+@media (max-width: 480px) {
+  nav {
+    flex-wrap: wrap;
+    row-gap: 14px;
+  }
+  .nav-search {
+    order: 3;
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 10px 14px;
+  }
+  nav a.wa-nav { padding: 10px; gap: 0; }
+  .wa-nav-text { display: none; } /* icon only on Android-width phones */
+}
+
+.nav-search-wrap { position: relative; flex: 1; max-width: 280px; margin: 0 20px; }
+.nav-search-wrap .nav-search { max-width: 100%; margin: 0; }
+
+.search-dropdown {
+  position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+  background: var(--paper);
+  border: 1px solid var(--gold);
+  max-height: 320px; overflow-y: auto;
+  z-index: 60;
+  box-shadow: 0 12px 30px rgba(11,10,8,0.35);
+}
+.search-dropdown-row {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 12px 16px; background: none; border: none;
+  border-bottom: 1px solid var(--hair);
+  cursor: pointer; text-align: left;
+  transition: background .15s ease;
+}
+.search-dropdown-row:last-child { border-bottom: none; }
+.search-dropdown-row:hover { background: rgba(184,144,62,0.08); }
+.search-dropdown-name {
+  font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; color: var(--charcoal);
+}
+.search-dropdown-price { font-size: 12.5px; font-weight: 600; color: var(--gold); white-space: nowrap; }
+.search-dropdown-empty { padding: 16px; font-size: 13px; color: var(--gray); text-align: center; }
+
+@media (max-width: 480px) {
+  .nav-search-wrap { order: 3; flex: 1 1 100%; max-width: 100%; margin: 0; }
+  .nav-search-wrap .nav-search { padding: 10px 14px; }
+}
+
+.featured-strip-wrap {
+  width: 100%; 
+  overflow: hidden; 
+  /* Changed from margin-top to padding to position it cleanly between nav and hero content */
+  padding: 24px 0; 
+  background: var(--bg-light, #fafafa); 
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+}
+
+.featured-strip-track {
+  display: flex; 
+  gap: 24px; /* Increased gap for structural breathing room */
+  width: max-content;
+  animation: marquee 30s linear infinite; /* Marginally slowed down for larger card scanning */
+}
+
+.featured-strip-wrap:hover .featured-strip-track { 
+  animation-play-state: paused; 
+}
+
+@keyframes marquee { 
+  from { transform: translateX(0); } 
+  to { transform: translateX(-50%); } 
+}
+
+/* --- TRANSFORMED INTO PRODUCT CARDS --- */
+.featured-chip {
+  display: flex; 
+  flex-direction: column; /* Stacks image above the text */
+  align-items: center; 
+  gap: 14px;
+  background: rgba(184, 144, 62, 0.04); 
+  border: 1px solid var(--hair, #e5e5e5);
+  border-radius: 8px; /* Slightly rounded edges for a card aesthetic */
+  padding: 18px; 
+  width: 180px; /* Explicit width prevents card collapsing in flex tracks */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.featured-chip:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold, #B8903E);
+}
+
+/* --- CARD IMAGE UPGRADES --- */
+.featured-chip-img {
+  width: 140px; /* Highly visible size instead of 32px */
+  height: 160px; 
+  border-radius: 4px; /* Soft card format instead of strict circle */
+  overflow: hidden; 
+  background: #fdfdfd; /* Clean light backing for luxury fragrances */
+  border: 1px solid rgba(0,0,0,0.03);
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.featured-chip-img img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+}
+
+.featured-chip-img svg { 
+  width: 40%; /* Proportional scale for the default bottle mark */
+  stroke: var(--gold, #B8903E); 
+}
+
+/* --- CARD TYPOGRAPHY UPGRADES --- */
+.featured-chip-name { 
+  font-family: 'Fraunces', serif; 
+  font-style: italic; 
+  font-size: 16px; /* Enhanced font size for readable titles */
+  font-weight: 500;
+  color: var(--fg, #222); 
+  text-align: center;
+  white-space: normal; /* Permits long fragrance titles to wrap gracefully */
+  display: -webkit-box;
+  --line-clamp: 2; /* Truncates long text gracefully at 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Ensure the link wraps retain text color rules and behave like block cards */
+a.featured-chip {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Container to handle layout stacking for name and price tags */
+.featured-chip-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+/* Distinctive layout typography rule for pricing elements */
+.featured-chip-price {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold, #B8903E);
+  letter-spacing: 0.5px;
+}
+
+
+/* Outer layout container to hold absolute arrow positions securely */
+.featured-strip-outer {
+  position: relative;
+  width: 100%;
+}
+
+.featured-strip-wrap {
+  width: 100%; 
+  overflow: hidden; 
+  padding: 24px 0; 
+  background: var(--bg-light, #fafafa); 
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+}
+
+.featured-strip-track {
+  display: flex; 
+  gap: 24px; 
+  width: max-content;
+  animation: marquee 30s linear infinite; 
+}
+
+.featured-strip-wrap:hover .featured-strip-track { 
+  animation-play-state: paused; 
+}
+
+@keyframes marquee { 
+  from { transform: translateX(0); } 
+  to { transform: translateX(-50%); } 
+}
+
+/* --- MOBILE CONTROLS & ARROWS --- */
+/* Hidden on desktop screen spaces by default */
+.strip-arrow {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--hair, #e5e5e5);
+  font-size: 24px;
+  line-height: 1;
+  color: var(--fg, #222);
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.arrow-left { left: 10px; }
+.arrow-right { right: 10px; }
+
+/* --- MOBILE SPECIFIC MEDIA QUERY OVERRIDES --- */
+@media (max-width: 768px) {
+  /* Display navigation arrows */
+  .strip-arrow {
+    display: flex;
+  }
+
+  /* Kill the automatic marquee animation loop so it stays static for user control */
+  .featured-strip-track {
+    animation: none !important;
+  }
+
+  /* Allow native finger-swipe/touch scrolling on the viewport container */
+  .featured-strip-wrap {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    /* Hides standard layout scrollbar aesthetics across devices */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; 
+  }
+  
+  .featured-strip-wrap::-webkit-scrollbar {
+    display: none; 
+  }
+}
+
+/* Existing typography and chip sizes remain the same */
+a.featured-chip {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.featured-chip {
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 14px;
+  background: rgba(184, 144, 62, 0.04); 
+  border: 1px solid var(--hair, #e5e5e5);
+  border-radius: 8px; 
+  padding: 18px; 
+  width: 180px; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.featured-chip-img {
+  width: 140px; 
+  height: 160px; 
+  border-radius: 4px; 
+  overflow: hidden; 
+  background: #fdfdfd; 
+  border: 1px solid rgba(0,0,0,0.03);
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  flex-shrink: 0;
+}
+.featured-chip-img img { width: 100%; height: 100%; object-fit: cover; }
+.featured-chip-img svg { width: 40%; stroke: var(--gold, #B8903E); }
+.featured-chip-meta { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
+.featured-chip-name { font-family: 'Fraunces', serif; font-style: italic; font-size: 16px; font-weight: 500; color: var(--fg, #222); text-align: center; white-space: normal; display: -webkit-box; -line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.featured-chip-price { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; font-weight: 600; color: var(--gold, #B8903E); letter-spacing: 0.5px; }
+
+
+
+
 
 /* ---------- Admin ---------- */
 .admin-shell {
