@@ -84,11 +84,11 @@ export default function ProductDetailPage() {
       <section className="collection light">
         <div className="inner detail-wrap">
           <Link
-            to="/"
+            to="/collection"
             className="admin-btn-ghost"
             style={{ display: "inline-block", marginBottom: 24 }}
           >
-            ← Back to home
+            ← Back to collection
           </Link>
 
           <div className="modal-card detail-card">
