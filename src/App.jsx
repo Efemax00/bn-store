@@ -33,70 +33,66 @@ function Storefront() {
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* ===================== PUBLIC STORE ===================== */}
+      <SearchProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* ===================== PUBLIC STORE ===================== */}
 
-          <Route
-            path="/"
-            element={
-              <SearchProvider>
+            <Route
+              path="/"
+              element={
                 <StoreProductsProvider>
                   <Storefront />
                 </StoreProductsProvider>
-              </SearchProvider>
-            }
-          />
+              }
+            />
 
-          <Route
-            path="/collection"
-            element={
-              <SearchProvider>
+            <Route
+              path="/collection"
+              element={
                 <StoreProductsProvider>
                   <CollectionPage />
                 </StoreProductsProvider>
-              </SearchProvider>
-            }
-          />
+              }
+            />
 
-          <Route
-            path="/product/:id"
-            element={
-              <SearchProvider>
+            <Route
+              path="/product/:id"
+              element={
                 <StoreProductsProvider>
                   <ProductDetailPage />
                 </StoreProductsProvider>
-              </SearchProvider>
-            }
-          />
+              }
+            />
 
-          {/* ===================== ADMIN ===================== */}
+            {/* ===================== ADMIN ===================== */}
 
-          <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
 
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminProductsProvider>
-                  <AdminDashboard />
-                </AdminProductsProvider>
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminProductsProvider>
+                    <AdminDashboard />
+                  </AdminProductsProvider>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/admin/sales"
-            element={
-              <ProtectedRoute>
-                <AdminProductsProvider>
-                  <SalesDashboard />
-                </AdminProductsProvider>
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+            <Route
+              path="/admin/sales"
+              element={
+                <ProtectedRoute>
+                  <AdminProductsProvider>
+                    <SalesDashboard />
+                  </AdminProductsProvider>
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </SearchProvider>
     </AuthProvider>
   );
 }
